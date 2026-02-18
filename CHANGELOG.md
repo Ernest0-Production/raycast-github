@@ -1,5 +1,13 @@
 # GitHub Changelog
 
+## [Add Cursor support for "Clone in VS Code" action] - 2026-02-19
+
+- Search Repositories: Added "VS Code Build" preference to select which editor to use for the "Clone in VS Code" action
+- Repository Actions: Updated the "Clone in VS Code" action to use the selected editor based on the preference
+- Search Repositories: Added "Disable Throttle" preference to disable search input throttling for immediate search on each keystroke
+- Search Repositories: Added pagination to load all repositories beyond initial fetch limit
+- Search Repositories: Improved loading states with skeleton items during pagination
+
 ## [Add Pagination Support to My Starred Repositories] - 2026-01-24
 
 - My Starred Repositories: Migrated from REST API to GraphQL API for better pagination support

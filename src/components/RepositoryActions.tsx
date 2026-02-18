@@ -30,7 +30,7 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
   sortTypesData,
 }: RepositoryActionProps<T> & SortActionProps & SortTypesDataProps) {
   const { github } = getGitHubClient();
-  const { baseClonePath, repositoryCloneProtocol, application } = getPreferenceValues<Preferences.SearchRepositories>();
+  const { baseClonePath, repositoryCloneProtocol, application, vscodeBuild } = getPreferenceValues<Preferences.SearchRepositories>();
 
   const updatedAt = new Date(repository.updatedAt);
 
@@ -141,7 +141,7 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
         <Action.OpenInBrowser
           icon={{ source: "vscode.svg", tintColor: Color.PrimaryText }}
           title="Clone in VS Code"
-          url={`vscode://vscode.git/clone?url=${repository.url}`}
+          url={`${vscodeBuild}://vscode.git/clone?url=${repository.url}`}
           shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
         />
 

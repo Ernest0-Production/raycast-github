@@ -23,6 +23,10 @@ type RepositoryListEmptyViewProps = {
 export default function RepositoryListEmptyView({ searchText, isLoading }: RepositoryListEmptyViewProps) {
   const example = useMemo(() => sampleQueries[random(0, sampleQueries.length - 1)], []);
 
+  if (searchText.length > 0 && isLoading) {
+    return <List.EmptyView title="Searching repositories..." />;
+  }
+
   if (searchText.length > 0 && !isLoading) {
     return <List.EmptyView title="No repositories found" />;
   }

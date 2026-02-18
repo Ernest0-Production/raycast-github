@@ -26,8 +26,7 @@ function SearchRepositories() {
   const { data: history, visitRepository } = useHistory(searchText, searchFilter);
   const query = useMemo(
     () =>
-      `${searchFilter} ${searchText} ${sortQuery} fork:${preferences.includeForks} ${
-        preferences.includeArchived ? "" : "archived:false"
+      `${searchFilter} ${searchText} ${sortQuery} fork:${preferences.includeForks} ${preferences.includeArchived ? "" : "archived:false"
       }`,
     [searchText, searchFilter, sortQuery, preferences.includeForks, preferences.includeArchived],
   );
@@ -38,15 +37,16 @@ function SearchRepositories() {
     mutate: mutateList,
   } = useCachedPromise(
     async (query) => {
+      if (!query) return undefined;
       const result = await github.searchRepositories({
         query,
-        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 50 }),
+        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 20 }),
       });
 
       return result.search.nodes?.map((node) => node as ExtendedRepositoryFieldsFragment);
     },
-    [query],
-    { keepPreviousData: true },
+    [searchText.trim() ? query : null],
+    { keepPreviousData: false },
   );
 
   useEffect(
@@ -64,27 +64,34 @@ function SearchRepositories() {
     [data, validHistory],
   );
 
+  const visitedRepositories = searchText.trim() && data && data.length > 0 ? validHistory : history;
+
   return (
     <List
       isLoading={isLoading}
       searchBarPlaceholder="Search in public and private repositories"
       onSearchTextChange={setSearchText}
       searchBarAccessory={<SearchRepositoryDropdown onFilterChange={setSearchFilter} />}
-      throttle
+      throttle={!preferences.disableThrottle}
     >
-      <List.Section title="Visited Repositories" subtitle={validHistory ? String(validHistory.length) : undefined}>
-        {validHistory.map((repository) => (
-          <RepositoryListItem
-            key={repository.id}
-            repository={repository}
-            onVisit={visitRepository}
-            mutateList={mutateList}
-            sortQuery={sortQuery}
-            setSortQuery={setSortQuery}
-            sortTypesData={sortTypesData}
-          />
-        ))}
-      </List.Section>
+      {visitedRepositories.length > 0 ? (
+        <List.Section
+          title={searchText.trim() ? "Visited Repositories" : "Recent Visited Repositories"}
+          subtitle={String(visitedRepositories.length)}
+        >
+          {visitedRepositories.map((repository) => (
+            <RepositoryListItem
+              key={repository.id}
+              repository={repository}
+              onVisit={visitRepository}
+              mutateList={mutateList}
+              sortQuery={sortQuery}
+              setSortQuery={setSortQuery}
+              sortTypesData={sortTypesData}
+            />
+          ))}
+        </List.Section>
+      ) : null}
 
       {foundRepositories ? (
         <List.Section
