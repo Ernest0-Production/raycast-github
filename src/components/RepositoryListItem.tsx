@@ -41,7 +41,7 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
     ? isToday(updatedAt)
       ? `${differenceInHours(Date.now(), updatedAt)}h`
       : format(updatedAt, "MMM d")
-  : undefined;
+    : undefined;
 
   if (language || updatedAtText) {
     const parts = [language?.name, updatedAtText].filter(Boolean);
@@ -81,9 +81,7 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
         ? {
             subtitle: {
               value: `${starIcon} ${numberOfStars}`,
-              tooltip: repository.viewerHasStarred
-                ? `Starred · Number of Stars`
-                : `Number of Stars`,
+              tooltip: repository.viewerHasStarred ? `Starred · Number of Stars` : `Number of Stars`,
             },
           }
         : {})}

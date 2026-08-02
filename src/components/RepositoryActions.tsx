@@ -55,9 +55,7 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
       await mutateList(undefined, {
         optimisticUpdate(data) {
           if (!Array.isArray(data)) return data;
-          return data.map((repo) =>
-            repo.id === updatedRepository.id ? { ...repo, ...updatedRepository } : repo,
-          ) as T;
+          return data.map((repo) => (repo.id === updatedRepository.id ? { ...repo, ...updatedRepository } : repo)) as T;
         },
       });
 
@@ -88,9 +86,7 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
       await mutateList(undefined, {
         optimisticUpdate(data) {
           if (!Array.isArray(data)) return data;
-          return data.map((repo) =>
-            repo.id === updatedRepository.id ? { ...repo, ...updatedRepository } : repo,
-          ) as T;
+          return data.map((repo) => (repo.id === updatedRepository.id ? { ...repo, ...updatedRepository } : repo)) as T;
         },
       });
 
@@ -191,7 +187,7 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
           title="Show Pull Requests"
           icon={{ source: "pull-request-open.svg", tintColor: Color.PrimaryText }}
           shortcut={{
-            macOS: { modifiers: ["cmd", ], key: "m" },
+            macOS: { modifiers: ["cmd"], key: "m" },
             Windows: { modifiers: ["ctrl"], key: "m" },
           }}
           target={<RepositoryPullRequestList repo={repository.nameWithOwner} />}
@@ -200,10 +196,7 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
         <Action.Push
           icon={Icon.List}
           title="Show Releases"
-          shortcut={{
-            macOS: { modifiers: ["cmd"], key: "r" },
-            Windows: { modifiers: ["ctrl"], key: "r" },
-          }}
+          shortcut={Keyboard.Shortcut.Common.Refresh}
           target={<RepositoryReleases repository={repository} />}
           onPush={() => onVisit(repository)}
         />

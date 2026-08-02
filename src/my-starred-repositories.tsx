@@ -115,9 +115,7 @@ function MyStarredRepositories() {
     async (
       _asyncUpdate?: unknown,
       options?: {
-        optimisticUpdate?: (
-          data: ExtendedRepositoryFieldsFragment[],
-        ) => ExtendedRepositoryFieldsFragment[] | undefined;
+        optimisticUpdate?: (data: ExtendedRepositoryFieldsFragment[]) => ExtendedRepositoryFieldsFragment[] | undefined;
       },
     ) => {
       if (options?.optimisticUpdate) {

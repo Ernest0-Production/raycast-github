@@ -14,11 +14,7 @@ function DiscussionFilterDropdown(props: { value: string; onChange?: (value: str
   return (
     <List.Dropdown tooltip="Filter" value={props.value} onChange={props.onChange}>
       <List.Dropdown.Item value="" title="All" icon={Icon.SpeechBubble} />
-      <List.Dropdown.Item
-        value="answered"
-        title="Answered"
-        icon={{ source: Icon.Checkmark, tintColor: Color.Green }}
-      />
+      <List.Dropdown.Item value="answered" title="Answered" icon={{ source: Icon.Checkmark, tintColor: Color.Green }} />
       <List.Dropdown.Item value="unanswered" title="Unanswered" icon={Icon.Circle} />
       <List.Dropdown.Item value="locked" title="Locked" icon={Icon.Lock} />
       <List.Dropdown.Item value="unlocked" title="Unlocked" icon={Icon.LockUnlocked} />

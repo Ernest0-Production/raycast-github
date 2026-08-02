@@ -29,7 +29,10 @@ export type PullRequest =
 type PullRequestActionsProps = {
   pullRequest: PullRequest;
   viewer?: UserFieldsFragment;
-  mutateList?: MutatePromise<PullRequestFieldsFragment[] | undefined> | ReturnType<typeof useMyPullRequests>["mutate"];
+  mutateList?:
+    | MutatePromise<PullRequestFieldsFragment[] | undefined>
+    | MutatePromise<PullRequestFieldsFragment[]>
+    | ReturnType<typeof useMyPullRequests>["mutate"];
   mutateDetail?: MutatePromise<PullRequest>;
   children?: React.ReactNode;
 };

@@ -34,7 +34,9 @@ const config: CodegenConfig = {
     },
   },
   // The lint command does not expect any additional arguments, so we pass # to ignore them
-  hooks: { afterAllFileWrite: ["ray lint --fix #"] },
+  hooks: {
+    afterAllFileWrite: ["node scripts/strip-graphql-duplicates.mjs", "ray lint --fix #"],
+  },
 };
 
 export default config;

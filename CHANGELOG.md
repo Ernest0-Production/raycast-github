@@ -1,5 +1,13 @@
 # GitHub Changelog
 
+## [Unreleased]
+
+- Search Repositories: Add pagination and a **Relevance** sort option (now the default).
+- Search Pull Requests and Notifications: Add pagination so more results can be loaded beyond the initial page.
+- Repository lists: Show language and compact update date in accessories; use ★/☆ to reflect whether you starred the repository.
+- Preferences: Lower the default number of search results to 25 for faster initial loads.
+- Update Raycast API / utils and related dependencies.
+
 ## [Mark draft pull requests as ready for review] - 2026-07-09
 
 - Added a "Ready for Review" action to pull request lists, shown for your own draft pull requests.

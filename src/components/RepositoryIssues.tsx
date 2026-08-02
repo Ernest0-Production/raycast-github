@@ -20,11 +20,7 @@ function IssueStatusDropdown(props: { value: IssueStatusFilter; onChange: (value
       value={props.value}
       onChange={(value) => props.onChange(value as IssueStatusFilter)}
     >
-      <List.Dropdown.Item
-        value="open"
-        title="Open"
-        icon={{ source: "issue-open.svg", tintColor: Color.Green }}
-      />
+      <List.Dropdown.Item value="open" title="Open" icon={{ source: "issue-open.svg", tintColor: Color.Green }} />
       <List.Dropdown.Item
         value="closed"
         title="Closed"
