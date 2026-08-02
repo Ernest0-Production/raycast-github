@@ -18,7 +18,7 @@ function SearchRepositories() {
 
   const [searchText, setSearchText] = useState("");
   const [searchFilter, setSearchFilter] = useState<string | null>(null);
-  const [sortQuery, setSortQuery] = useCachedState<string | null>("sort-query", null, {
+  const [sortQuery, setSortQuery] = useCachedState<string>("sort-query", "", {
     cacheNamespace: "github-search-repo",
   });
   const sortTypesData = REPO_SORT_TYPES_TO_QUERIES;

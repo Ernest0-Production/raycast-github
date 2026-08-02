@@ -30,10 +30,26 @@ fragment ExtendedRepositoryFields on Repository {
   mergeCommitAllowed
   squashMergeAllowed
   rebaseMergeAllowed
+  autoMergeAllowed
+  updatedAt
+  pushedAt
+  stargazerCount
   isArchived
   isFork
   isPrivate
   viewerHasStarred
+  primaryLanguage {
+    id
+    name
+    color
+  }
+  hasIssuesEnabled
+  hasWikiEnabled
+  hasProjectsEnabled
+  hasDiscussionsEnabled
+  releases {
+    totalCount
+  }
 }
 
 query searchRepositories($query: String!, $numberOfItems: Int!, $after: String) {

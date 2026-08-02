@@ -1,12 +1,12 @@
 import { Action, ActionPanel, Color, Icon, MenuBarExtra } from "@raycast/api";
 
-type SortType = { title: string; value: string | null };
+type SortType = { title: string; value: string };
 
 export type SortTypesDataProps = { sortTypesData: SortType[] };
 
 export type SortActionProps = Partial<{
-  sortQuery: string | null;
-  setSortQuery: (value: string | null) => void;
+  sortQuery: string;
+  setSortQuery: (value: string) => void;
 }>;
 
 type SortActionDataProps = { data: SortType[] } & SortActionProps;
@@ -15,16 +15,16 @@ export const SortAction = ({ sortQuery, setSortQuery, data }: SortActionDataProp
   setSortQuery ? (
     <ActionPanel.Submenu title={"Sort By"} icon={Icon.ArrowUp} shortcut={{ modifiers: ["cmd", "shift"], key: "s" }}>
       {data
-        .filter(({ value }) => value == null || !value.startsWith("sort:reaction"))
+        .filter(({ value }) => !value.startsWith("sort:reaction"))
         .map(({ title, value }) => (
-          <SortActionItem key={value ?? "null"} {...{ title, value, sortQuery, setSortQuery }} />
+          <SortActionItem key={value || "relevance"} {...{ title, value, sortQuery: sortQuery ?? "", setSortQuery }} />
         ))}
-      {data.some(({ value }) => value && value.startsWith("sort:reaction")) && (
+      {data.some(({ value }) => value.startsWith("sort:reaction")) && (
         <ActionPanel.Section title={"Most Reactions"}>
           {data
-            .filter(({ value }) => value && value.startsWith("sort:reaction"))
+            .filter(({ value }) => value.startsWith("sort:reaction"))
             .map(({ title, value }) => (
-              <SortActionItem key={value ?? "null"} {...{ title, value, sortQuery, setSortQuery }} />
+              <SortActionItem key={value} {...{ title, value, sortQuery: sortQuery ?? "", setSortQuery }} />
             ))}
         </ActionPanel.Section>
       )}
@@ -38,7 +38,7 @@ const SortActionItem = ({
   value,
   sortQuery,
   setSortQuery,
-}: { title: string; value: string | null } & Required<SortActionProps>) => (
+}: { title: string; value: string } & Required<SortActionProps>) => (
   <Action
     title={title}
     icon={sortQuery === value ? { source: Icon.CheckCircle, tintColor: Color.Green } : Icon.Circle}
@@ -52,14 +52,14 @@ export const SortMenuBarAction = ({ sortQuery, setSortQuery, data }: SortActionD
       {data
         .filter(({ value }) => !value.startsWith("sort:reaction"))
         .map(({ title, value }) => (
-          <SortMenuBarItem key={value} {...{ title, value, sortQuery, setSortQuery }} />
+          <SortMenuBarItem key={value || "relevance"} {...{ title, value, sortQuery: sortQuery ?? "", setSortQuery }} />
         ))}
       {data.some(({ value }) => value.startsWith("sort:reaction")) && (
         <MenuBarExtra.Section title="Most Reactions">
           {data
             .filter(({ value }) => value.startsWith("sort:reaction"))
             .map(({ title, value }) => (
-              <SortMenuBarItem key={value} {...{ title, value, sortQuery, setSortQuery }} />
+              <SortMenuBarItem key={value} {...{ title, value, sortQuery: sortQuery ?? "", setSortQuery }} />
             ))}
         </MenuBarExtra.Section>
       )}

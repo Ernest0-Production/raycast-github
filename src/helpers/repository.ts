@@ -121,7 +121,7 @@ export function useHistory(searchText: string | undefined, searchFilter: string 
 }
 
 export const REPO_SORT_TYPES_TO_QUERIES = [
-  { title: "Relevance", value: null },
+  { title: "Relevance", value: "" },
   { title: "Last Update", value: "sort:updated-desc" },
   { title: "Name", value: "sort:name-asc" },
   { title: "Stars", value: "sort:stars-desc" },
