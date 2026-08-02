@@ -1,9 +1,8 @@
-import { Color, List } from "@raycast/api";
+import { Color, Icon, List } from "@raycast/api";
 import { MutatePromise } from "@raycast/utils";
 import { differenceInHours, format, formatDistanceToNow, isToday } from "date-fns";
 
 import { ExtendedRepositoryFieldsFragment } from "../generated/graphql";
-import { brightenLanguageColor, getLanguageIcon } from "../helpers/language";
 import { getGitHubUser } from "../helpers/users";
 
 import RepositoryActions from "./RepositoryActions";
@@ -35,37 +34,41 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
       ? new Date(repository.updatedAt)
       : undefined;
 
-  const accessories: List.Item.Accessory[] = updatedAt
-    ? [
-        {
-          text: isToday(updatedAt) ? `${differenceInHours(Date.now(), updatedAt)}h` : format(updatedAt, "MMM d"),
-          tooltip: `Updated ${formatDistanceToNow(updatedAt, { addSuffix: true })}`,
-        },
-      ]
-    : [];
+  const accessories: List.Item.Accessory[] = [];
+
+  const language = repository.primaryLanguage;
+  const updatedAtText = updatedAt
+    ? isToday(updatedAt)
+      ? `${differenceInHours(Date.now(), updatedAt)}h`
+      : format(updatedAt, "MMM d")
+  : undefined;
+
+  if (language || updatedAtText) {
+    const parts = [language?.name, updatedAtText].filter(Boolean);
+    const tooltipParts = [
+      language ? `Language: ${language.name}` : undefined,
+      updatedAt ? `Updated ${formatDistanceToNow(updatedAt, { addSuffix: true })}` : undefined,
+    ].filter(Boolean);
+
+    accessories.push({
+      text: parts.join(" • "),
+      tooltip: tooltipParts.join(" • "),
+    });
+  }
 
   if (repository.isArchived) {
     accessories.unshift({
-      tag: { value: "Archived", color: Color.Orange },
+      tag: { value: "", color: Color.Orange },
+      icon: Icon.Tray,
       tooltip: "This repository is archived",
     });
   }
 
   if (repository.isFork) {
     accessories.unshift({
-      tag: { value: "Fork", color: Color.Purple },
-      icon: { source: "fork.svg", tintColor: Color.Purple },
+      tag: { value: "", color: Color.Purple },
+      icon: { source: "fork.svg" },
       tooltip: "This repository is a fork",
-    });
-  }
-
-  if (repository.primaryLanguage) {
-    const { name, color } = repository.primaryLanguage;
-    const vividColor = brightenLanguageColor(color) ?? Color.SecondaryText;
-    accessories.unshift({
-      tag: { value: name, color: vividColor },
-      icon: getLanguageIcon(name, color),
-      tooltip: `Language: ${name}`,
     });
   }
 
