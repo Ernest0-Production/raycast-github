@@ -1,6 +1,6 @@
 # GitHub Changelog
 
-## [Unreleased]
+## [Search Pagination and Repository List Improvements] - {PR_MERGE_DATE}
 
 - Search Repositories: Add pagination and a **Relevance** sort option (now the default).
 - Search Pull Requests and Notifications: Add pagination so more results can be loaded beyond the initial page.

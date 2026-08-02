@@ -21,7 +21,7 @@ export function useMyRepositories() {
         ownerQueryKey.split(" ").map((ownerQuery: string) =>
           github.searchRepositories({
             query: `${ownerQuery} archived:false sort:updated-desc`,
-            numberOfItems: 25,
+            numberOfItems: 100,
           }),
         ),
       );
