@@ -44,7 +44,7 @@ function UnreadNotifications() {
   }, [preferences.repositoryList]);
 
   const { data, isLoading, mutate } = useCachedPromise(async () => {
-    const response = await octokit.activity.listNotificationsForAuthenticatedUser({ per_page: 25 });
+    const response = await octokit.activity.listNotificationsForAuthenticatedUser();
     let notifications = response.data;
 
     if (preferences.repositoryFilterMode !== "all" && repositoryListArray.length > 0) {
