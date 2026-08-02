@@ -24,7 +24,7 @@ function Notifications() {
     isLoading,
     mutate: mutateList,
   } = useCachedPromise(async () => {
-    const response = await octokit.activity.listNotificationsForAuthenticatedUser({ all: true });
+    const response = await octokit.activity.listNotificationsForAuthenticatedUser({ all: true, per_page: 22 });
     return Promise.all(
       response.data.map(async (notification: Notification) => {
         const icon = await getNotificationIcon(notification);

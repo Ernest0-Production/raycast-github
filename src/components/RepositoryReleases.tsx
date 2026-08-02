@@ -4,7 +4,7 @@ import { useCachedPromise } from "@raycast/utils";
 import { getGitHubClient } from "../api/githubClient";
 import { ExtendedRepositoryFieldsFragment, ReleaseFieldsFragment } from "../generated/graphql";
 
-const RELEASES_PAGE_SIZE = 30;
+const RELEASES_PAGE_SIZE = 22;
 
 export default function RepositoryReleases(props: { repository: ExtendedRepositoryFieldsFragment }) {
   const { github } = getGitHubClient();

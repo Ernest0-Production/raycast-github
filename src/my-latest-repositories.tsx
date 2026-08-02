@@ -27,7 +27,7 @@ function MyLatestRepositories() {
       const orderByField = sort.split(":")[0].toUpperCase() as RepositoryOrderField;
       const orderByDirection = sort.split(":")[1].toUpperCase() as OrderDirection;
       const result = await github.myLatestRepositories({
-        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 50 }),
+        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 22 }),
         orderByField,
         orderByDirection,
       });

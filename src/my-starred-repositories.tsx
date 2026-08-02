@@ -9,7 +9,7 @@ import { ExtendedRepositoryFieldsFragment, OrderDirection, StarOrderField } from
 import { STARRED_REPO_DEFAULT_SORT_QUERY, STARRED_REPO_SORT_TYPES_TO_QUERIES, useHistory } from "./helpers/repository";
 import { withGitHubClient } from "./helpers/withGithubClient";
 
-const STARRED_REPOSITORIES_BATCH_SIZE = 25;
+const STARRED_REPOSITORIES_BATCH_SIZE = 22;
 
 function MyStarredRepositories() {
   const { github } = getGitHubClient();
@@ -29,7 +29,7 @@ function MyStarredRepositories() {
     async (sort: string, afterCursor: string | null) => {
       const orderByField = sort.split(":")[0].toUpperCase() as StarOrderField;
       const orderByDirection = sort.split(":")[1].toUpperCase() as OrderDirection;
-      const requestedCount = getBoundedPreferenceNumber({ name: "numberOfResults", default: 50 });
+      const requestedCount = getBoundedPreferenceNumber({ name: "numberOfResults", default: 22 });
       const repos: ExtendedRepositoryFieldsFragment[] = [];
       let pageInfo: { hasNextPage: boolean; endCursor?: string | null } = {
         hasNextPage: false,
