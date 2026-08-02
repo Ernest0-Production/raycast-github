@@ -27,14 +27,14 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
 
   const owner = getGitHubUser(repository.owner);
   const numberOfStars = repository.stargazerCount;
-  const updatedAt = repository.pushedAt ? new Date(repository.pushedAt) : new Date(repository.updatedAt);
+  const updatedAt = repository.pushedAt ? new Date(repository.pushedAt) : repository.updatedAt ? new Date(repository.updatedAt) : undefined;
 
-  const accessories: List.Item.Accessory[] = [
+  const accessories: List.Item.Accessory[] = updatedAt ? [
     {
       date: updatedAt,
       tooltip: `Updated ${formatDistanceToNow(updatedAt, { addSuffix: true })}`,
     },
-  ];
+  ] : [];
 
   if (repository.isArchived) {
     accessories.unshift({
@@ -71,11 +71,11 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
       title={`${preferences.displayOwnerName ? `${repository.owner.login}/` : ""}${repository.name}`}
       {...(numberOfStars > 0
         ? {
-            subtitle: {
-              value: `★ ${numberOfStars}`,
-              tooltip: `Number of Stars: ${numberOfStars}`,
-            },
-          }
+          subtitle: {
+            value: `★ ${numberOfStars}`,
+            tooltip: `Number of Stars: ${numberOfStars}`,
+          },
+        }
         : {})}
       accessories={accessories}
       actions={<RepositoryActions {...{ repository, onVisit, mutateList, sortQuery, setSortQuery, sortTypesData }} />}

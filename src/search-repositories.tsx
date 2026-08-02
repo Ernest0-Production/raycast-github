@@ -8,7 +8,7 @@ import RepositoryListEmptyView from "./components/RepositoryListEmptyView";
 import RepositoryListItem from "./components/RepositoryListItem";
 import SearchRepositoryDropdown from "./components/SearchRepositoryDropdown";
 import { ExtendedRepositoryFieldsFragment } from "./generated/graphql";
-import { REPO_DEFAULT_SORT_QUERY, REPO_SORT_TYPES_TO_QUERIES, useHistory } from "./helpers/repository";
+import { REPO_SORT_TYPES_TO_QUERIES, useHistory } from "./helpers/repository";
 import { withGitHubClient } from "./helpers/withGithubClient";
 
 function SearchRepositories() {
@@ -18,7 +18,7 @@ function SearchRepositories() {
 
   const [searchText, setSearchText] = useState("");
   const [searchFilter, setSearchFilter] = useState<string | null>(null);
-  const [sortQuery, setSortQuery] = useCachedState<string>("sort-query", REPO_DEFAULT_SORT_QUERY, {
+  const [sortQuery, setSortQuery] = useCachedState<string | null>("sort-query", null, {
     cacheNamespace: "github-search-repo",
   });
   const sortTypesData = REPO_SORT_TYPES_TO_QUERIES;
@@ -35,16 +35,23 @@ function SearchRepositories() {
     data,
     isLoading,
     mutate: mutateList,
+    pagination,
   } = useCachedPromise(
-    async (query) => {
-      if (!query) return undefined;
-      const result = await github.searchRepositories({
-        query,
-        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 20 }),
-      });
+    (query: string | null) =>
+      async (options: { page: number; cursor?: string }) => {
+        if (!query) return { data: [] as ExtendedRepositoryFieldsFragment[], hasMore: false };
 
-      return result.search.nodes?.map((node) => node as ExtendedRepositoryFieldsFragment);
-    },
+        const result = await github.searchRepositories({
+          query,
+          numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 30 }),
+          after: options.page > 0 ? options.cursor : undefined,
+        });
+        return {
+          data: result.search.nodes?.map((node) => node as ExtendedRepositoryFieldsFragment) ?? [],
+          hasMore: result.search.pageInfo.hasNextPage,
+          cursor: result.search.pageInfo.endCursor ?? undefined,
+        };
+      },
     [searchText.trim() ? query : null],
     { keepPreviousData: false },
   );
@@ -73,6 +80,7 @@ function SearchRepositories() {
       onSearchTextChange={setSearchText}
       searchBarAccessory={<SearchRepositoryDropdown onFilterChange={setSearchFilter} />}
       throttle={!preferences.disableThrottle}
+      pagination={pagination}
     >
       {visitedRepositories.length > 0 ? (
         <List.Section

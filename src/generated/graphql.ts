@@ -39508,7 +39508,7 @@ export type ExtendedRepositoryFieldsFragment = {
   mergeCommitAllowed: boolean;
   squashMergeAllowed: boolean;
   rebaseMergeAllowed: boolean;
-  updatedAt: any;
+  updatedAt?: any | null;
   pushedAt?: any | null;
   stargazerCount: number;
   isArchived: boolean;
@@ -39534,6 +39534,7 @@ export type ExtendedRepositoryFieldsFragment = {
 export type SearchRepositoriesQueryVariables = Exact<{
   query: Scalars["String"]["input"];
   numberOfItems: Scalars["Int"]["input"];
+  after?: Scalars["String"]["input"];
 }>;
 
 export type SearchRepositoriesQuery = {
@@ -39556,7 +39557,7 @@ export type SearchRepositoriesQuery = {
           mergeCommitAllowed: boolean;
           squashMergeAllowed: boolean;
           rebaseMergeAllowed: boolean;
-          updatedAt: any;
+          updatedAt?: any | null;
           pushedAt?: any | null;
           stargazerCount: number;
           isArchived: boolean;
@@ -39581,6 +39582,11 @@ export type SearchRepositoriesQuery = {
       | { __typename?: "User" }
       | null
     > | null;
+    pageInfo: {
+      __typename?: "PageInfo";
+      endCursor?: string | null;
+      hasNextPage: boolean;
+    };
   };
 };
 
@@ -40681,13 +40687,6 @@ export const ExtendedRepositoryFieldsFragmentDoc = gql`
       name
       color
     }
-    hasIssuesEnabled
-    hasWikiEnabled
-    hasProjectsEnabled
-    hasDiscussionsEnabled
-    releases {
-      totalCount
-    }
   }
 `;
 export const ReleaseFieldsFragmentDoc = gql`
@@ -41135,10 +41134,14 @@ export const InitPullRequestDocument = gql`
   ${PullRequestFieldsFragmentDoc}
 `;
 export const SearchRepositoriesDocument = gql`
-  query searchRepositories($query: String!, $numberOfItems: Int!) {
-    search(query: $query, first: $numberOfItems, type: REPOSITORY) {
+  query searchRepositories($query: String!, $numberOfItems: Int!, $after: String) {
+    search(query: $query, first: $numberOfItems, after: $after, type: REPOSITORY) {
       nodes {
         ...ExtendedRepositoryFields
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
   }
