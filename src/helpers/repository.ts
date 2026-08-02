@@ -105,6 +105,24 @@ export function useHistory(searchText: string | undefined, searchFilter: string 
     setHistory(nextRepositories);
   }
 
+  function updateRepository(repository: ExtendedRepositoryFieldsFragment) {
+    setHistory((current) =>
+      (current ?? []).map((item) =>
+        item.id === repository.id
+          ? {
+              ...item,
+              viewerHasStarred: repository.viewerHasStarred,
+              stargazerCount: repository.stargazerCount,
+            }
+          : item,
+      ),
+    );
+  }
+
+  function removeRepository(repository: ExtendedRepositoryFieldsFragment) {
+    setHistory((current) => (current ?? []).filter((item) => item.id !== repository.id));
+  }
+
   let data = history;
 
   if (searchText) {
@@ -117,7 +135,7 @@ export function useHistory(searchText: string | undefined, searchFilter: string 
     data = data.filter((r) => r.nameWithOwner.match(repositoryFilter));
   }
 
-  return { data, visitRepository };
+  return { data, visitRepository, updateRepository, removeRepository };
 }
 
 export const REPO_SORT_TYPES_TO_QUERIES = [

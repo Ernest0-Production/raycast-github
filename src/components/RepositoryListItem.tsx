@@ -1,8 +1,9 @@
-import { Color, Icon, List, getPreferenceValues } from "@raycast/api";
+import { Color, List } from "@raycast/api";
 import { MutatePromise } from "@raycast/utils";
 import { formatDistanceToNow } from "date-fns";
 
 import { ExtendedRepositoryFieldsFragment } from "../generated/graphql";
+import { brightenLanguageColor, getLanguageIcon } from "../helpers/language";
 import { getGitHubUser } from "../helpers/users";
 
 import RepositoryActions from "./RepositoryActions";
@@ -11,6 +12,8 @@ import { SortActionProps, SortTypesDataProps } from "./SortAction";
 type RepositoryListItemProps<T = ExtendedRepositoryFieldsFragment[] | undefined> = {
   repository: ExtendedRepositoryFieldsFragment;
   onVisit: (repository: ExtendedRepositoryFieldsFragment) => void;
+  onUpdate?: (repository: ExtendedRepositoryFieldsFragment) => void;
+  onRemove?: (repository: ExtendedRepositoryFieldsFragment) => void;
   mutateList: MutatePromise<T>;
 } & SortActionProps &
   SortTypesDataProps;
@@ -19,22 +22,28 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
   repository,
   mutateList,
   onVisit,
+  onUpdate,
+  onRemove,
   sortQuery,
   setSortQuery,
   sortTypesData,
 }: RepositoryListItemProps<T>) {
-  const preferences = getPreferenceValues<Preferences.SearchRepositories>();
-
   const owner = getGitHubUser(repository.owner);
   const numberOfStars = repository.stargazerCount;
-  const updatedAt = repository.pushedAt ? new Date(repository.pushedAt) : repository.updatedAt ? new Date(repository.updatedAt) : undefined;
+  const updatedAt = repository.pushedAt
+    ? new Date(repository.pushedAt)
+    : repository.updatedAt
+      ? new Date(repository.updatedAt)
+      : undefined;
 
-  const accessories: List.Item.Accessory[] = updatedAt ? [
-    {
-      date: updatedAt,
-      tooltip: `Updated ${formatDistanceToNow(updatedAt, { addSuffix: true })}`,
-    },
-  ] : [];
+  const accessories: List.Item.Accessory[] = updatedAt
+    ? [
+        {
+          date: updatedAt,
+          tooltip: `Updated ${formatDistanceToNow(updatedAt, { addSuffix: true })}`,
+        },
+      ]
+    : [];
 
   if (repository.isArchived) {
     accessories.unshift({
@@ -46,21 +55,24 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
   if (repository.isFork) {
     accessories.unshift({
       tag: { value: "Fork", color: Color.Purple },
+      icon: { source: "fork.svg", tintColor: Color.Purple },
       tooltip: "This repository is a fork",
     });
   }
 
   if (repository.primaryLanguage) {
+    const { name, color } = repository.primaryLanguage;
+    const vividColor = brightenLanguageColor(color) ?? Color.SecondaryText;
     accessories.unshift({
-      tag: { value: repository.primaryLanguage.name, color: repository.primaryLanguage.color ?? Color.SecondaryText },
-      icon: Icon.Code,
-      tooltip: `Language: ${repository.primaryLanguage.name}`,
+      tag: { value: name, color: vividColor },
+      icon: getLanguageIcon(name, color),
+      tooltip: `Language: ${name}`,
     });
   }
 
   if (repository.viewerHasStarred) {
     accessories.unshift({
-      icon: { source: Icon.Star, tintColor: Color.Yellow },
+      icon: { source: "star-filled.svg", tintColor: Color.Yellow },
       tooltip: "You have starred this repository",
     });
   }
@@ -68,17 +80,21 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
   return (
     <List.Item
       icon={owner.icon}
-      title={`${preferences.displayOwnerName ? `${repository.owner.login}/` : ""}${repository.name}`}
+      title={repository.nameWithOwner}
       {...(numberOfStars > 0
         ? {
-          subtitle: {
-            value: `★ ${numberOfStars}`,
-            tooltip: `Number of Stars: ${numberOfStars}`,
-          },
-        }
+            subtitle: {
+              value: `☆ ${numberOfStars}`,
+              tooltip: `Number of Stars: ${numberOfStars}`,
+            },
+          }
         : {})}
       accessories={accessories}
-      actions={<RepositoryActions {...{ repository, onVisit, mutateList, sortQuery, setSortQuery, sortTypesData }} />}
+      actions={
+        <RepositoryActions
+          {...{ repository, onVisit, onUpdate, onRemove, mutateList, sortQuery, setSortQuery, sortTypesData }}
+        />
+      }
     />
   );
 }

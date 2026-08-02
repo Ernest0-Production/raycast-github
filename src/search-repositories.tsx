@@ -23,11 +23,12 @@ function SearchRepositories() {
   });
   const sortTypesData = REPO_SORT_TYPES_TO_QUERIES;
 
-  const { data: history, visitRepository } = useHistory(searchText, searchFilter);
+  const { data: history, visitRepository, updateRepository, removeRepository } = useHistory(searchText, searchFilter);
   const query = useMemo(
     () =>
-      `${searchFilter} ${searchText} ${sortQuery} fork:${preferences.includeForks} ${preferences.includeArchived ? "" : "archived:false"
-      }`,
+      `${searchFilter} ${searchText} ${sortQuery} fork:${preferences.includeForks} ${
+        preferences.includeArchived ? "" : "archived:false"
+      }`.toLowerCase(),
     [searchText, searchFilter, sortQuery, preferences.includeForks, preferences.includeArchived],
   );
 
@@ -37,21 +38,20 @@ function SearchRepositories() {
     mutate: mutateList,
     pagination,
   } = useCachedPromise(
-    (query: string | null) =>
-      async (options: { page: number; cursor?: string }) => {
-        if (!query) return { data: [] as ExtendedRepositoryFieldsFragment[], hasMore: false };
+    (query: string | null) => async (options: { page: number; cursor?: string }) => {
+      if (!query) return { data: [] as ExtendedRepositoryFieldsFragment[], hasMore: false };
 
-        const result = await github.searchRepositories({
-          query,
-          numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 30 }),
-          after: options.page > 0 ? options.cursor : undefined,
-        });
-        return {
-          data: result.search.nodes?.map((node) => node as ExtendedRepositoryFieldsFragment) ?? [],
-          hasMore: result.search.pageInfo.hasNextPage,
-          cursor: result.search.pageInfo.endCursor ?? undefined,
-        };
-      },
+      const result = await github.searchRepositories({
+        query,
+        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 30 }),
+        after: options.page > 0 ? options.cursor : undefined,
+      });
+      return {
+        data: result.search.nodes?.map((node) => node as ExtendedRepositoryFieldsFragment) ?? [],
+        hasMore: result.search.pageInfo.hasNextPage,
+        cursor: result.search.pageInfo.endCursor ?? undefined,
+      };
+    },
     [searchText.trim() ? query : null],
     { keepPreviousData: false },
   );
@@ -92,6 +92,8 @@ function SearchRepositories() {
               key={repository.id}
               repository={repository}
               onVisit={visitRepository}
+              onUpdate={updateRepository}
+              onRemove={removeRepository}
               mutateList={mutateList}
               sortQuery={sortQuery}
               setSortQuery={setSortQuery}
@@ -111,6 +113,7 @@ function SearchRepositories() {
               key={repository.id}
               repository={repository}
               onVisit={visitRepository}
+              onUpdate={updateRepository}
               mutateList={mutateList}
               sortQuery={sortQuery}
               setSortQuery={setSortQuery}

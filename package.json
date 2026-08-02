@@ -595,12 +595,12 @@
     },
     {
       "name": "enable-auto-merge",
-      "title": "Enable Auto-merge",
+      "title": "Enable Auto-Merge",
       "description": "Enable auto-merge on a pull request"
     },
     {
       "name": "disable-auto-merge",
-      "title": "Disable Auto-merge",
+      "title": "Disable Auto-Merge",
       "description": "Disable auto-merge on a pull request"
     },
     {
@@ -635,7 +635,7 @@
     },
     {
       "name": "rerun-workflow-run",
-      "title": "Re-run Workflow",
+      "title": "Re-Run Workflow",
       "description": "Re-run Workflow"
     },
     {
@@ -1105,10 +1105,11 @@
   ],
   "dependencies": {
     "@octokit/rest": "^21.0.1",
-    "@raycast/api": "^1.104.17",
-    "@raycast/utils": "^1.16.0",
+    "@raycast/api": "^1.104.24",
+    "@raycast/utils": "^2.2.7",
     "date-fns": "^3.6.0",
-    "graphql-request": "^6.1.0",
+    "graphql": "^16.14.2",
+    "graphql-request": "^7.4.0",
     "lodash": "^4.17.23",
     "node-fetch": "^3.3.2",
     "yauzl": "^3.2.0"
@@ -1119,18 +1120,17 @@
     "@graphql-codegen/typescript-graphql-request": "^7.0.1",
     "@graphql-codegen/typescript-operations": "^6.0.2",
     "@parcel/watcher": "^2.4.1",
-    "@raycast/eslint-config": "^2.1.1",
+    "@raycast/eslint-config": "^2.2.0",
     "@types/lodash": "^4.17.5",
-    "@types/node": "^22.1.0",
+    "@types/node": "^22.19.17",
     "@types/react": "^19.0.10",
     "@types/yauzl": "^2.10.3",
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
-    "graphql": "^16.8.2",
     "prettier": "^3.3.2",
-    "react": "^18.3.1",
+    "react": "^19.2.8",
     "typescript": "^5.4.5"
   },
   "scripts": {

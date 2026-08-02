@@ -17,6 +17,20 @@ const config: CodegenConfig = {
   generates: {
     "./src/generated/graphql.ts": {
       plugins: ["typescript", "typescript-operations", "typescript-graphql-request"],
+      config: {
+        scalars: {
+          Base64String: "string",
+          Date: "string",
+          DateTime: "string",
+          GitObjectID: "string",
+          GitSSHRemote: "string",
+          GitTimestamp: "string",
+          HTML: "string",
+          PreciseDateTime: "string",
+          URI: "string",
+          X509Certificate: "string",
+        },
+      },
     },
   },
   // The lint command does not expect any additional arguments, so we pass # to ignore them

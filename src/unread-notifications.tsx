@@ -11,6 +11,7 @@ import {
   openExtensionPreferences,
   showToast,
   Toast,
+  Keyboard,
 } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import { useMemo } from "react";
@@ -128,7 +129,7 @@ function UnreadNotifications() {
       <MenuBarExtra.Item
         icon={getGitHubIcon()}
         title="Open GitHub Notifications"
-        shortcut={{ modifiers: ["cmd"], key: "o" }}
+        shortcut={Keyboard.Shortcut.Common.Open}
         onAction={() => open("https://github.com/notifications")}
       />
 
@@ -168,20 +169,22 @@ function UnreadNotifications() {
           <MenuBarExtra.Item
             title="Mark All as Read"
             icon={Icon.Checkmark}
-            shortcut={{ /* gmail uses shift-i to mark as read */ modifiers: ["cmd"], key: "i" }}
+            shortcut={{ macOS: { modifiers: ["cmd"], key: "i" }, Windows: { modifiers: ["ctrl"], key: "i" } }}
             onAction={markAllNotificationsAsRead}
           />
         ) : null}
         <MenuBarExtra.Item
           title="View All Notifications"
           icon={Icon.Eye}
-          shortcut={{ modifiers: ["cmd", "shift"], key: "o" }}
+          shortcut={Keyboard.Shortcut.Common.OpenWith}
           onAction={() => launchCommand({ name: "notifications", type: LaunchType.UserInitiated })}
         />
 
         <MenuBarExtra.Item
           title="Configure Command"
           icon={Icon.Gear}
+          // Reserved OpenPreferences keys, but this is the Configure Command action — keep custom binding.
+          // eslint-disable-next-line @raycast/no-reserved-shortcut, @raycast/no-ambiguous-platform-shortcut
           shortcut={{ modifiers: ["cmd"], key: "," }}
           onAction={openCommandPreferences}
           alternate={

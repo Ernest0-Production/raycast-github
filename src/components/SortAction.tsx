@@ -13,7 +13,13 @@ type SortActionDataProps = { data: SortType[] } & SortActionProps;
 
 export const SortAction = ({ sortQuery, setSortQuery, data }: SortActionDataProps) =>
   setSortQuery ? (
-    <ActionPanel.Submenu title={"Sort By"} icon={Icon.ArrowUp} shortcut={{ modifiers: ["cmd", "shift"], key: "s" }}>
+    <ActionPanel.Submenu
+      title={"Sort by"}
+      icon={Icon.ArrowUp}
+      // Same keys as Common.Duplicate, but action is Sort by — keep custom binding.
+      // eslint-disable-next-line @raycast/prefer-common-shortcut, @raycast/no-ambiguous-platform-shortcut
+      shortcut={{ modifiers: ["cmd", "shift"], key: "s" }}
+    >
       {data
         .filter(({ value }) => !value.startsWith("sort:reaction"))
         .map(({ title, value }) => (
