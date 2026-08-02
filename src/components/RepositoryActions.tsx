@@ -181,8 +181,8 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
           title="Show Issues"
           icon={{ source: "issue-open.svg", tintColor: Color.PrimaryText }}
           shortcut={{
-            macOS: { modifiers: ["cmd", "opt"], key: "i" },
-            Windows: { modifiers: ["ctrl", "alt"], key: "i" },
+            macOS: { modifiers: ["cmd"], key: "i" },
+            Windows: { modifiers: ["ctrl"], key: "i" },
           }}
           target={<RepositoryIssueList repo={repository.nameWithOwner} />}
           onPush={() => onVisit(repository)}
@@ -191,8 +191,8 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
           title="Show Pull Requests"
           icon={{ source: "pull-request-open.svg", tintColor: Color.PrimaryText }}
           shortcut={{
-            macOS: { modifiers: ["cmd", "opt"], key: "p" },
-            Windows: { modifiers: ["ctrl", "alt"], key: "p" },
+            macOS: { modifiers: ["cmd", ], key: "m" },
+            Windows: { modifiers: ["ctrl"], key: "m" },
           }}
           target={<RepositoryPullRequestList repo={repository.nameWithOwner} />}
           onPush={() => onVisit(repository)}
@@ -201,8 +201,8 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
           icon={Icon.List}
           title="Show Releases"
           shortcut={{
-            macOS: { modifiers: ["cmd", "shift"], key: "r" },
-            Windows: { modifiers: ["ctrl", "shift"], key: "r" },
+            macOS: { modifiers: ["cmd"], key: "r" },
+            Windows: { modifiers: ["ctrl"], key: "r" },
           }}
           target={<RepositoryReleases repository={repository} />}
           onPush={() => onVisit(repository)}
@@ -211,8 +211,8 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
           icon={Icon.SpeechBubble}
           title="Show Discussions"
           shortcut={{
-            macOS: { modifiers: ["cmd", "opt"], key: "d" },
-            Windows: { modifiers: ["ctrl", "alt"], key: "d" },
+            macOS: { modifiers: ["cmd"], key: "d" },
+            Windows: { modifiers: ["ctrl"], key: "d" },
           }}
           target={<RepositoryDiscussionList repository={repository.nameWithOwner} />}
           onPush={() => onVisit(repository)}
@@ -225,8 +225,8 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
           title="Open Pull Requests"
           url={`${repository.url}/pulls`}
           shortcut={{
-            macOS: { modifiers: ["cmd", "shift"], key: "p" },
-            Windows: { modifiers: ["ctrl", "shift"], key: "p" },
+            macOS: { modifiers: ["cmd", "shift"], key: "m" },
+            Windows: { modifiers: ["ctrl", "shift"], key: "m" },
           }}
           onOpen={() => onVisit(repository)}
         />

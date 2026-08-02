@@ -10,7 +10,7 @@ export function useDiscussions(query: string) {
     async (query) => {
       const result = await github.searchDiscussions({
         query,
-        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 22 }),
+        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 25 }),
       });
       return result.searchDiscussions;
     },

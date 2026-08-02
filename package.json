@@ -1026,7 +1026,7 @@
       "required": false,
       "title": "Number of search results",
       "description": "For searching repositories, issues, discussions or pull requests, this is the number of results to request. Less will be faster.",
-      "placeholder": "22"
+      "placeholder": "25"
     },
     {
       "name": "baseClonePath",

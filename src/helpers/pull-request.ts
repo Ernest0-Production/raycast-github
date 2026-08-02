@@ -130,10 +130,10 @@ export function getNumberOfComments(pullRequest: PullRequestFieldsFragment) {
 export function getCheckStateAccessory(commitStatusCheckRollupState: StatusState): List.Item.Accessory | null {
   switch (commitStatusCheckRollupState) {
     case "SUCCESS":
-      return { icon: Icon.Check, tooltip: "Checks: Success" };
+      return { icon: { source: Icon.Check, tintColor: Color.Green }, tooltip: "Checks: Success" };
     case "ERROR":
     case "FAILURE":
-      return { icon: Icon.Xmark, tooltip: "Checks: Failure" };
+      return { icon: { source: Icon.Xmark, tintColor: Color.Red }, tooltip: "Checks: Failure" };
     case "PENDING":
       return { icon: Icon.Clock, tooltip: "Checks: Pending" };
     default:

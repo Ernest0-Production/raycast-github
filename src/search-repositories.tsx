@@ -43,7 +43,7 @@ function SearchRepositories() {
 
       const result = await github.searchRepositories({
         query,
-        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 22 }),
+        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 25 }),
         after: options.page > 0 ? options.cursor : undefined,
       });
       return {
@@ -52,7 +52,7 @@ function SearchRepositories() {
         cursor: result.search.pageInfo.endCursor ?? undefined,
       };
     },
-    [searchText.trim() ? query : null],
+    [searchText.trim() || searchFilter?.trim() ? query : null],
     { keepPreviousData: false },
   );
 

@@ -25,7 +25,7 @@ export default withGitHubClient(async ({ query }: Input) => {
   const { github } = getGitHubClient();
 
   const result = await github.searchIssues({
-    numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 22 }),
+    numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 25 }),
     query: `is:issue archived:false ${query}`,
   });
 

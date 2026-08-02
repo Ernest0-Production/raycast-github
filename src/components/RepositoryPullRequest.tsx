@@ -61,7 +61,6 @@ export function RepositoryPullRequestList(props: { repo: string }): JSX.Element 
   const [sortQuery, setSortQuery] = useCachedState<string>("sort-query", PR_DEFAULT_SORT_QUERY, {
     cacheNamespace: "github-repo-pr",
   });
-  const repoFilter = props.repo && props.repo.length > 0 ? `repo:${props.repo}` : "";
   const statusQuery = statusFilter === "all" ? "" : `is:${statusFilter}`;
 
   const {
@@ -70,7 +69,8 @@ export function RepositoryPullRequestList(props: { repo: string }): JSX.Element 
     mutate: mutateList,
     pagination,
   } = useCachedPromise(
-    (query, sortTxt, statusQuery) => async (options: { page: number; cursor?: string }) => {
+    (repo, query, sortTxt, statusQuery) => async (options: { page: number; cursor?: string }) => {
+      const repoFilter = repo && repo.length > 0 ? `repo:${repo}` : "";
       const result = await github.searchPullRequests({
         query: `is:pr ${statusQuery} ${repoFilter} ${sortTxt} archived:false ${query}`.replace(/\s+/g, " ").trim(),
         numberOfItems: PULL_REQUESTS_PAGE_SIZE,
@@ -85,7 +85,7 @@ export function RepositoryPullRequestList(props: { repo: string }): JSX.Element 
         cursor: result.search.pageInfo.endCursor ?? undefined,
       };
     },
-    [searchText, sortQuery, statusQuery],
+    [props.repo, searchText, sortQuery, statusQuery],
   );
 
   return (

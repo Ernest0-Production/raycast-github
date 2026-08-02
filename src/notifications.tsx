@@ -12,6 +12,8 @@ import { useViewer } from "./hooks/useViewer";
 
 export type NotificationWithIcon = Notification & { icon: Awaited<ReturnType<typeof getNotificationIcon>> };
 
+const NOTIFICATIONS_PAGE_SIZE = 25;
+
 function Notifications() {
   const { octokit } = getGitHubClient();
 
@@ -23,15 +25,29 @@ function Notifications() {
     data,
     isLoading,
     mutate: mutateList,
-  } = useCachedPromise(async () => {
-    const response = await octokit.activity.listNotificationsForAuthenticatedUser({ all: true, per_page: 22 });
-    return Promise.all(
-      response.data.map(async (notification: Notification) => {
-        const icon = await getNotificationIcon(notification);
-        return { ...notification, icon };
-      }),
-    );
-  });
+    pagination,
+  } = useCachedPromise(
+    () => async (options: { page: number }) => {
+      const response = await octokit.activity.listNotificationsForAuthenticatedUser({
+        all: true,
+        per_page: NOTIFICATIONS_PAGE_SIZE,
+        page: options.page + 1,
+      });
+
+      const notifications = await Promise.all(
+        response.data.map(async (notification: Notification) => {
+          const icon = await getNotificationIcon(notification);
+          return { ...notification, icon };
+        }),
+      );
+
+      return {
+        data: notifications,
+        hasMore: response.data.length === NOTIFICATIONS_PAGE_SIZE,
+      };
+    },
+    [],
+  );
 
   const notifications = useMemo(() => {
     if (selectedRepository) {
@@ -48,6 +64,7 @@ function Notifications() {
       isLoading={isLoading}
       searchBarPlaceholder="Filter by title"
       searchBarAccessory={<RepositoriesDropdown setSelectedRepository={setSelectedRepository} />}
+      pagination={pagination}
     >
       {unreadNotifications.length > 0 ? (
         <List.Section title="Unread">

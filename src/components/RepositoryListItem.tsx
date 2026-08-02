@@ -66,8 +66,7 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
 
   if (repository.isFork) {
     accessories.unshift({
-      tag: { value: "", color: Color.Purple },
-      icon: { source: "fork.svg" },
+      icon: { source: "fork.svg", tintColor: Color.Purple },
       tooltip: "This repository is a fork",
     });
   }
