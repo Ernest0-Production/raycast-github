@@ -1,6 +1,6 @@
 import { Color, List } from "@raycast/api";
 import { MutatePromise } from "@raycast/utils";
-import { formatDistanceToNow } from "date-fns";
+import { differenceInHours, format, formatDistanceToNow, isToday } from "date-fns";
 
 import { ExtendedRepositoryFieldsFragment } from "../generated/graphql";
 import { brightenLanguageColor, getLanguageIcon } from "../helpers/language";
@@ -8,7 +8,6 @@ import { getGitHubUser } from "../helpers/users";
 
 import RepositoryActions from "./RepositoryActions";
 import { SortActionProps, SortTypesDataProps } from "./SortAction";
-
 type RepositoryListItemProps<T = ExtendedRepositoryFieldsFragment[] | undefined> = {
   repository: ExtendedRepositoryFieldsFragment;
   onVisit: (repository: ExtendedRepositoryFieldsFragment) => void;
@@ -39,7 +38,7 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
   const accessories: List.Item.Accessory[] = updatedAt
     ? [
         {
-          date: updatedAt,
+          text: isToday(updatedAt) ? `${differenceInHours(Date.now(), updatedAt)}h` : format(updatedAt, "MMM d"),
           tooltip: `Updated ${formatDistanceToNow(updatedAt, { addSuffix: true })}`,
         },
       ]
@@ -70,12 +69,7 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
     });
   }
 
-  if (repository.viewerHasStarred) {
-    accessories.unshift({
-      icon: { source: "star-filled.svg", tintColor: Color.Yellow },
-      tooltip: "You have starred this repository",
-    });
-  }
+  const starIcon = repository.viewerHasStarred ? "★" : "☆";
 
   return (
     <List.Item
@@ -84,8 +78,10 @@ export default function RepositoryListItem<T = ExtendedRepositoryFieldsFragment[
       {...(numberOfStars > 0
         ? {
             subtitle: {
-              value: `☆ ${numberOfStars}`,
-              tooltip: `Number of Stars: ${numberOfStars}`,
+              value: `${starIcon} ${numberOfStars}`,
+              tooltip: repository.viewerHasStarred
+                ? `Starred · Number of Stars`
+                : `Number of Stars`,
             },
           }
         : {})}
