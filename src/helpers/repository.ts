@@ -2,14 +2,21 @@ import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
 
-import { Color, getPreferenceValues, showToast, Toast } from "@raycast/api";
+import { Color, getPreferenceValues, Keyboard, showToast, Toast } from "@raycast/api";
 import { useCachedState } from "@raycast/utils";
 
 import { ExtendedRepositoryFieldsFragment } from "../generated/graphql";
 
 import { getErrorMessage } from "./errors";
 
-export const WEB_IDES = [
+type WebIDE = {
+  title: string;
+  baseUrl: string;
+  icon?: { source: string; tintColor?: typeof Color.PrimaryText };
+  shortcut?: Keyboard.Shortcut;
+};
+
+export const WEB_IDES: WebIDE[] = [
   {
     title: "github.dev",
     baseUrl: "https://github.dev/",
