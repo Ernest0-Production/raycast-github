@@ -109,14 +109,14 @@ export default function RepositoryActions<T = ExtendedRepositoryFieldsFragment[]
       <ActionPanel.Section>
         <Action.OpenInBrowser url={repository.url} onOpen={() => onVisit(repository)} />
 
-        <ActionPanel.Submenu icon={Icon.Globe} title="Open in Web IDE">
-          {WEB_IDES.map((ide, index) => (
+        <ActionPanel.Submenu icon={Icon.Globe} title="Open in Web IDE" shortcut={Keyboard.Shortcut.Common.Open}>
+          {WEB_IDES.map((ide) => (
             <Action.OpenInBrowser
               title={ide.title}
               icon={ide.icon || getFavicon(ide.baseUrl)}
               key={ide.title}
               url={ide.baseUrl + repository.nameWithOwner}
-              shortcut={index === 0 ? Keyboard.Shortcut.Common.OpenWith : undefined}
+              shortcut={ide.shortcut}
               onOpen={() => onVisit(repository)}
             />
           ))}

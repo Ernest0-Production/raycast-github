@@ -7,6 +7,7 @@
 - Repository lists: Show language and compact update date in accessories; use ★/☆ to reflect whether you starred the repository.
 - Preferences: Lower the default number of search results to 25 for faster initial loads.
 - Update Raycast API / utils and related dependencies.
+- Open in Web IDE: Add **DeepWiki** to open AI-generated repository docs at deepwiki.com.
 
 ## [Mark draft pull requests as ready for review] - 2026-07-09
 
