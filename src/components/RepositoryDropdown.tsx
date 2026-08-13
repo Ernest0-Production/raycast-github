@@ -1,4 +1,4 @@
-import { Icon, Image, List } from "@raycast/api";
+import { Image, List } from "@raycast/api";
 
 import { useMyRepositories } from "../hooks/useRepositories";
 
@@ -15,7 +15,7 @@ export default function RepositoriesDropdown({
 
   return (
     <List.Dropdown tooltip="Select Repository" storeValue onChange={setSelectedRepository}>
-      {withAllRepositories ? <List.Dropdown.Item value="" title="All Repositories" icon={Icon.List} /> : null}
+      {withAllRepositories ? <List.Dropdown.Item value="" title="All Repositories" /> : null}
 
       {repositories && repositories.length > 0 ? (
         <List.Dropdown.Section>

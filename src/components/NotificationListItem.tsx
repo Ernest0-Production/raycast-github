@@ -9,7 +9,7 @@ import NotificationActions from "./NotificationActions";
 type NotificationListItemProps = {
   notification: NotificationWithIcon;
   userId?: string;
-  mutateList: MutatePromise<NotificationWithIcon[] | undefined> | MutatePromise<NotificationWithIcon[]>;
+  mutateList: MutatePromise<NotificationWithIcon[] | undefined>;
 };
 
 export default function NotificationListItem({ notification, userId, mutateList }: NotificationListItemProps) {

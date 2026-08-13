@@ -113,14 +113,8 @@ export function BranchForm({ draftValues }: BranchFormProps) {
   const issues = data?.repository?.issues?.nodes?.filter((node) => node?.linkedBranches.totalCount == 0);
 
   useEffect(() => {
-    const repoUrl = data?.repository?.url;
-    const oid = data?.repository?.defaultBranchRef?.target?.oid;
-    if (repoUrl) {
-      setValue("repoUrl", repoUrl);
-    }
-    if (oid) {
-      setValue("oid", oid);
-    }
+    setValue("repoUrl", data?.repository?.url);
+    setValue("oid", data?.repository?.defaultBranchRef?.target?.oid);
   }, [data?.repository?.url, data?.repository?.defaultBranchRef?.target?.oid]);
 
   return (

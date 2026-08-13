@@ -129,8 +129,8 @@ export function IssueForm({ draftValues }: IssueFormProps) {
   const labels = data?.repository?.labels?.nodes;
 
   const repositoryProjects = data?.repository?.projectsV2?.nodes ?? [];
-  const owner = data?.repository?.owner;
-  const organizationProjects = owner && "projectsV2" in owner ? (owner.projectsV2?.nodes ?? []) : [];
+  const organizationProjects =
+    data?.repository?.owner?.__typename === "Organization" ? (data.repository.owner.projectsV2?.nodes ?? []) : [];
   const projects = [...repositoryProjects, ...organizationProjects].filter((project, index, list) => {
     if (!project) {
       return false;

@@ -1,15 +1,4 @@
-import {
-  Action,
-  ActionPanel,
-  Alert,
-  Clipboard,
-  Color,
-  Icon,
-  Toast,
-  confirmAlert,
-  showToast,
-  Keyboard,
-} from "@raycast/api";
+import { Action, ActionPanel, Alert, Clipboard, Color, Icon, Toast, confirmAlert, showToast } from "@raycast/api";
 import { MutatePromise, useCachedPromise } from "@raycast/utils";
 import { useState } from "react";
 
@@ -179,13 +168,8 @@ export default function IssueActions({
     try {
       await showToast({ style: Toast.Style.Animated, title: `Creating branch for issue #${issue.number}` });
 
-      const oid = issue.repository.defaultBranchRef?.target?.oid;
-      if (!oid) {
-        throw new Error("Repository default branch commit SHA is unavailable");
-      }
-
       const res = await github.createLinkedBranch({
-        input: { issueId: issue.id, oid },
+        input: { issueId: issue.id, oid: issue.repository.defaultBranchRef?.target?.oid },
       });
       const branchName = res.createLinkedBranch?.linkedBranch?.ref?.name;
       await mutate();
@@ -259,10 +243,7 @@ export default function IssueActions({
           <Action
             title={isAssignedToMe ? "Unassign from Me" : "Assign to Me"}
             icon={viewerUser.icon}
-            shortcut={{
-              macOS: { modifiers: ["cmd", "shift"], key: "i" },
-              Windows: { modifiers: ["ctrl", "shift"], key: "i" },
-            }}
+            shortcut={{ modifiers: ["cmd", "shift"], key: "i" }}
             onAction={() => (isAssignedToMe ? unassignFromMe(viewer.id) : assignToMe(viewer.id))}
           />
         ) : null}
@@ -275,10 +256,7 @@ export default function IssueActions({
           <Action
             title={"Create Issue Branch"}
             icon={{ source: "branch.svg", tintColor: Color.PrimaryText }}
-            shortcut={{
-              macOS: { modifiers: ["cmd", "shift"], key: "b" },
-              Windows: { modifiers: ["ctrl", "shift"], key: "b" },
-            }}
+            shortcut={{ modifiers: ["cmd", "shift"], key: "b" }}
             onAction={() => createLinkedBranch()}
           />
         ) : null}
@@ -325,47 +303,32 @@ export default function IssueActions({
         <Action.CopyToClipboard
           content={issue.number}
           title="Copy Issue Number"
-          shortcut={{
-            macOS: { modifiers: ["cmd", "shift"], key: "." },
-            Windows: { modifiers: ["ctrl", "shift"], key: "." },
-          }}
+          shortcut={{ modifiers: ["cmd", "shift"], key: "." }}
         />
 
         <Action.CopyToClipboard
           content={issue.url}
           title="Copy Issue URL"
-          shortcut={{
-            macOS: { modifiers: ["cmd", "shift"], key: "," },
-            Windows: { modifiers: ["ctrl", "shift"], key: "," },
-          }}
+          shortcut={{ modifiers: ["cmd", "shift"], key: "," }}
         />
 
         <Action.CopyToClipboard
           content={issue.title}
           title="Copy Issue Title"
-          shortcut={{
-            macOS: { modifiers: ["ctrl", "shift"], key: "," },
-            Windows: { modifiers: ["ctrl", "shift"], key: "," },
-          }}
+          shortcut={{ modifiers: ["ctrl", "shift"], key: "," }}
         />
 
         <Action.CopyToClipboard
           content={`[${issue.title}](${issue.url})`}
           title="Copy Markdown URL"
-          shortcut={{
-            macOS: { modifiers: ["cmd", "shift"], key: ";" },
-            Windows: { modifiers: ["ctrl", "shift"], key: ";" },
-          }}
+          shortcut={{ modifiers: ["cmd", "shift"], key: ";" }}
         />
 
         {linkedBranch?.ref?.name ? (
           <Action.CopyToClipboard
             content={linkedBranch.ref?.name}
             title="Copy Branch Name"
-            shortcut={{
-              macOS: { modifiers: ["ctrl", "shift"], key: "." },
-              Windows: { modifiers: ["ctrl", "shift"], key: "." },
-            }}
+            shortcut={{ modifiers: ["ctrl", "shift"], key: "." }}
           />
         ) : null}
       </ActionPanel.Section>
@@ -376,7 +339,7 @@ export default function IssueActions({
           icon={Icon.ArrowClockwise}
           title="Refresh"
           onAction={mutate}
-          shortcut={Keyboard.Shortcut.Common.Refresh}
+          shortcut={{ modifiers: ["cmd"], key: "r" }}
         />
       </ActionPanel.Section>
     </ActionPanel>
@@ -437,10 +400,7 @@ function AddAssigneeSubmenu({ issue, mutate }: SubmenuProps) {
     <ActionPanel.Submenu
       title="Add Assignee"
       icon={Icon.AddPerson}
-      shortcut={{
-        macOS: { modifiers: ["cmd", "shift"], key: "a" },
-        Windows: { modifiers: ["ctrl", "shift"], key: "a" },
-      }}
+      shortcut={{ modifiers: ["cmd", "shift"], key: "a" }}
       onOpen={() => setLoad(true)}
     >
       {isLoading ? (
@@ -512,10 +472,7 @@ function AddProjectSubmenu({ issue, mutate }: SubmenuProps) {
     <ActionPanel.Submenu
       title="Add to Project"
       icon={{ source: "project.svg", tintColor: Color.PrimaryText }}
-      shortcut={{
-        macOS: { modifiers: ["cmd", "shift"], key: "p" },
-        Windows: { modifiers: ["ctrl", "shift"], key: "p" },
-      }}
+      shortcut={{ modifiers: ["cmd", "shift"], key: "p" }}
       onOpen={() => setLoad(true)}
     >
       {isLoading ? (
@@ -606,10 +563,7 @@ function SetMilestoneSubmenu({ issue, mutate }: SubmenuProps) {
     <ActionPanel.Submenu
       title="Set Milestone"
       icon={{ source: "milestone.svg", tintColor: Color.PrimaryText }}
-      shortcut={{
-        macOS: { modifiers: ["cmd", "shift"], key: "m" },
-        Windows: { modifiers: ["ctrl", "shift"], key: "m" },
-      }}
+      shortcut={{ modifiers: ["cmd", "shift"], key: "m" }}
       onOpen={() => setLoad(true)}
     >
       {isLoading ? (

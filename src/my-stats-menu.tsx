@@ -1,4 +1,4 @@
-import { Color, getPreferenceValues, Icon, Image, open, Keyboard } from "@raycast/api";
+import { Color, getPreferenceValues, Icon, Image, open } from "@raycast/api";
 import { formatDistanceToNowStrict } from "date-fns";
 
 import {
@@ -125,8 +125,6 @@ function MyStatsMenu() {
               <MenuBarItem
                 title="Mark All as Seen"
                 icon={Icon.Check}
-                // Reserved OpenActionPanel keys, but this is Mark All as Seen — keep custom binding.
-                // eslint-disable-next-line @raycast/no-reserved-shortcut, @raycast/no-ambiguous-platform-shortcut
                 shortcut={{ modifiers: ["cmd"], key: "k" }}
                 onAction={markAllSeen}
               />
@@ -349,7 +347,7 @@ function MyStatsMenu() {
         <MenuBarItem
           title="Open Profile on GitHub"
           icon={Icon.Globe}
-          shortcut={Keyboard.Shortcut.Common.Open}
+          shortcut={{ modifiers: ["cmd"], key: "o" }}
           onAction={() => open(profileUrl)}
         />
         <MenuBarItemConfigureCommand />

@@ -22,7 +22,7 @@ export default withGitHubClient(async ({ query }: Input) => {
 
   const result = await github.searchRepositories({
     query,
-    numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 25 }),
+    numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 50 }),
   });
 
   return result.search.nodes;

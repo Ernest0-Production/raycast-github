@@ -1,4 +1,4 @@
-import { Color, getPreferenceValues, Icon, launchCommand, LaunchType, open, Keyboard } from "@raycast/api";
+import { Color, getPreferenceValues, Icon, launchCommand, LaunchType, open } from "@raycast/api";
 import { useCachedState } from "@raycast/utils";
 
 import {
@@ -88,7 +88,7 @@ function MyIssuesMenu() {
         <MenuBarItem
           title="Open My Issues"
           icon={Icon.AppWindowList}
-          shortcut={Keyboard.Shortcut.Common.Open}
+          shortcut={{ modifiers: ["cmd"], key: "o" }}
           onAction={() => launchMyIssuesCommand()}
         />
         <SortMenuBarAction {...{ sortQuery, setSortQuery, data: ISSUE_SORT_TYPES_TO_QUERIES }} />

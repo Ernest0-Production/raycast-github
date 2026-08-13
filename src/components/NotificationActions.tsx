@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Icon, LaunchType, Toast, launchCommand, open, showToast, Keyboard } from "@raycast/api";
+import { Action, ActionPanel, Icon, LaunchType, Toast, launchCommand, open, showToast } from "@raycast/api";
 import { MutatePromise, usePromise } from "@raycast/utils";
 
 import { getGitHubClient } from "../api/githubClient";
@@ -9,7 +9,7 @@ import { NotificationWithIcon } from "../notifications";
 type NotificationActionsProps = {
   notification: NotificationWithIcon;
   userId?: string;
-  mutateList: MutatePromise<NotificationWithIcon[] | undefined> | MutatePromise<NotificationWithIcon[]>;
+  mutateList: MutatePromise<NotificationWithIcon[] | undefined>;
 };
 
 export default function NotificationActions({ notification, userId, mutateList }: NotificationActionsProps) {
@@ -161,10 +161,7 @@ export default function NotificationActions({ notification, userId, mutateList }
           <Action
             title="Mark All as Read"
             icon={Icon.Circle}
-            shortcut={{
-              macOS: { modifiers: ["cmd", "shift"], key: "enter" },
-              Windows: { modifiers: ["ctrl", "shift"], key: "enter" },
-            }}
+            shortcut={{ modifiers: ["cmd", "shift"], key: "enter" }}
             onAction={markAllNotificationsAsRead}
           />
         </>
@@ -174,17 +171,12 @@ export default function NotificationActions({ notification, userId, mutateList }
         title="Mark as Done"
         icon={Icon.Circle}
         onAction={markNotificationAsDone}
-        shortcut={{
-          macOS: { modifiers: ["cmd", "shift"], key: "d" },
-          Windows: { modifiers: ["ctrl", "shift"], key: "d" },
-        }}
+        shortcut={{ modifiers: ["cmd", "shift"], key: "d" }}
       />
 
       <Action
         title="Unsubscribe"
         icon={Icon.BellDisabled}
-        // Same keys as Common.Pin, but action is Unsubscribe — keep custom binding.
-        // eslint-disable-next-line @raycast/prefer-common-shortcut, @raycast/no-ambiguous-platform-shortcut
         shortcut={{ modifiers: ["cmd"], key: "." }}
         onAction={unsubscribe}
       />
@@ -193,20 +185,14 @@ export default function NotificationActions({ notification, userId, mutateList }
           <Action.CopyToClipboard
             content={url}
             title={`Copy ${getNotificationTypeTitle(notification)} URL`}
-            shortcut={{
-              macOS: { modifiers: ["cmd", "shift"], key: "," },
-              Windows: { modifiers: ["ctrl", "shift"], key: "," },
-            }}
+            shortcut={{ modifiers: ["cmd", "shift"], key: "," }}
           />
         ) : null}
 
         <Action.CopyToClipboard
           content={notification.subject.title}
           title={`Copy ${getNotificationTypeTitle(notification)} Title`}
-          shortcut={{
-            macOS: { modifiers: ["cmd", "shift"], key: "," },
-            Windows: { modifiers: ["ctrl", "shift"], key: "," },
-          }}
+          shortcut={{ modifiers: ["cmd", "shift"], key: "," }}
         />
       </ActionPanel.Section>
       <ActionPanel.Section>
@@ -214,7 +200,7 @@ export default function NotificationActions({ notification, userId, mutateList }
           icon={Icon.ArrowClockwise}
           title="Refresh"
           onAction={mutateList}
-          shortcut={Keyboard.Shortcut.Common.Refresh}
+          shortcut={{ modifiers: ["cmd"], key: "r" }}
         />
       </ActionPanel.Section>
     </ActionPanel>

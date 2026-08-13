@@ -30,23 +30,16 @@ function SearchPullRequests() {
     data,
     isLoading,
     mutate: mutateList,
-    pagination,
   } = useCachedPromise(
-    (searchText, searchFilter, sortTxt) => async (options: { page: number; cursor?: string }) => {
+    async (searchText, searchFilter, sortTxt) => {
       const result = await github.searchPullRequests({
-        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 25 }),
+        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 50 }),
         query: `is:pr archived:false ${sortTxt} ${searchFilter} ${searchText}`,
-        after: options.page > 0 ? options.cursor : undefined,
       });
 
-      return {
-        data:
-          result.search.edges
-            ?.map((edge) => edge?.node as PullRequestFieldsFragment | null | undefined)
-            .filter((node): node is PullRequestFieldsFragment => node != null) ?? [],
-        hasMore: result.search.pageInfo.hasNextPage,
-        cursor: result.search.pageInfo.endCursor ?? undefined,
-      };
+      return result.search.edges
+        ?.map((edge) => edge?.node as PullRequestFieldsFragment | null | undefined)
+        .filter((node): node is PullRequestFieldsFragment => node != null);
     },
     [searchText, searchFilter, sortQuery],
     { keepPreviousData: true },
@@ -60,7 +53,6 @@ function SearchPullRequests() {
       searchText={searchText}
       onSearchTextChange={setSearchText}
       throttle
-      pagination={pagination}
     >
       {data ? (
         <List.Section

@@ -11,7 +11,6 @@ import {
   openExtensionPreferences,
   showToast,
   Toast,
-  Keyboard,
 } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import { useMemo } from "react";
@@ -44,7 +43,7 @@ function UnreadNotifications() {
   }, [preferences.repositoryList]);
 
   const { data, isLoading, mutate } = useCachedPromise(async () => {
-    const response = await octokit.activity.listNotificationsForAuthenticatedUser({ per_page: 25 });
+    const response = await octokit.activity.listNotificationsForAuthenticatedUser();
     let notifications = response.data;
 
     if (preferences.repositoryFilterMode !== "all" && repositoryListArray.length > 0) {
@@ -129,7 +128,7 @@ function UnreadNotifications() {
       <MenuBarExtra.Item
         icon={getGitHubIcon()}
         title="Open GitHub Notifications"
-        shortcut={Keyboard.Shortcut.Common.Open}
+        shortcut={{ modifiers: ["cmd"], key: "o" }}
         onAction={() => open("https://github.com/notifications")}
       />
 
@@ -169,22 +168,20 @@ function UnreadNotifications() {
           <MenuBarExtra.Item
             title="Mark All as Read"
             icon={Icon.Checkmark}
-            shortcut={{ macOS: { modifiers: ["cmd"], key: "i" }, Windows: { modifiers: ["ctrl"], key: "i" } }}
+            shortcut={{ /* gmail uses shift-i to mark as read */ modifiers: ["cmd"], key: "i" }}
             onAction={markAllNotificationsAsRead}
           />
         ) : null}
         <MenuBarExtra.Item
           title="View All Notifications"
           icon={Icon.Eye}
-          shortcut={Keyboard.Shortcut.Common.OpenWith}
+          shortcut={{ modifiers: ["cmd", "shift"], key: "o" }}
           onAction={() => launchCommand({ name: "notifications", type: LaunchType.UserInitiated })}
         />
 
         <MenuBarExtra.Item
           title="Configure Command"
           icon={Icon.Gear}
-          // Reserved OpenPreferences keys, but this is the Configure Command action — keep custom binding.
-          // eslint-disable-next-line @raycast/no-reserved-shortcut, @raycast/no-ambiguous-platform-shortcut
           shortcut={{ modifiers: ["cmd"], key: "," }}
           onAction={openCommandPreferences}
           alternate={

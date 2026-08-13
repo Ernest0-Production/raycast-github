@@ -10,9 +10,9 @@ export function useDiscussions(query: string) {
     async (query) => {
       const result = await github.searchDiscussions({
         query,
-        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 25 }),
+        numberOfOpenItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 50 }),
       });
-      return result.searchDiscussions;
+      return result.openDiscussions;
     },
     [query],
   );

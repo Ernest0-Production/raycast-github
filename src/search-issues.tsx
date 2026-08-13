@@ -33,7 +33,7 @@ function SearchIssues() {
   } = useCachedPromise(
     async (searchText, searchFilter, sortTxt) => {
       const result = await github.searchIssues({
-        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 25 }),
+        numberOfItems: getBoundedPreferenceNumber({ name: "numberOfResults", default: 50 }),
         query: `is:issue archived:false ${sortTxt} ${searchFilter} ${searchText}`,
       });
 
