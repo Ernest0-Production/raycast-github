@@ -167,6 +167,14 @@ query issueByNumber($owner: String!, $name: String!, $issueNumber: Int!) {
   }
 }
 
+query issueByNumber($owner: String!, $name: String!, $issueNumber: Int!) {
+  repository(owner: $owner, name: $name) {
+    issue(number: $issueNumber) {
+      ...IssueFields
+    }
+  }
+}
+
 mutation closeIssue($nodeId: ID!, $stateReason: IssueClosedStateReason!) {
   closeIssue(input: { issueId: $nodeId, stateReason: $stateReason }) {
     issue {

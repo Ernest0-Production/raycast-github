@@ -2196,6 +2196,16 @@ export const IssueByNumberDocument = gql`
   }
   ${IssueFieldsFragmentDoc}
 `;
+export const IssueByNumberDocument = gql`
+  query issueByNumber($owner: String!, $name: String!, $issueNumber: Int!) {
+    repository(owner: $owner, name: $name) {
+      issue(number: $issueNumber) {
+        ...IssueFields
+      }
+    }
+  }
+  ${IssueFieldsFragmentDoc}
+`;
 export const CloseIssueDocument = gql`
   mutation closeIssue($nodeId: ID!, $stateReason: IssueClosedStateReason!) {
     closeIssue(input: { issueId: $nodeId, stateReason: $stateReason }) {
